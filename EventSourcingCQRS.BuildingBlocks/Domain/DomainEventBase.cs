@@ -6,13 +6,14 @@ namespace EventSourcingCQRS.BuildingBlocks.Domain
 {
     public abstract class DomainEventBase<TAggregateId> : IDomainEvent<TAggregateId>, IEquatable<DomainEventBase<TAggregateId>>
     {
-        public Guid EventId { get; private set; }
-        public TAggregateId AggregateId { get; private set; }
+        public Guid EventId { get; protected set; }
+        public TAggregateId AggregateId { get; protected set; }
 
         protected DomainEventBase()
         {
             this.EventId = Guid.NewGuid();
         }
+
         protected DomainEventBase(TAggregateId aggregateId) : this()
         {
             this.AggregateId = aggregateId;

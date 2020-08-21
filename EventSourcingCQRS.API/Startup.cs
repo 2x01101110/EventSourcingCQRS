@@ -1,6 +1,8 @@
 using EventSourcingCQRS.Application.Commands.CreateOrderCommand;
 using EventSourcingCQRS.Domain.Models.Orders;
 using EventSourcingCQRS.Infrastructure.EventSourcing;
+using EventSourcingCQRS.Infrastructure.ReadModel;
+using EventSourcingCQRS.Infrastructure.ReadModel.Models;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +31,10 @@ namespace EventSourcingCQRS.API
             services.AddScoped<IEventStore, EventStore>();
             services.AddDbContext<EventStoreContext>(options =>
                 options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=EventSourcingCQRS.EventStore;Trusted_Connection=True;MultipleActiveResultSets=true"));
+            services.AddDbContext<ReadModelContext>(options =>
+                options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=EventSourcingCQRS.ReadModel;Trusted_Connection=True;MultipleActiveResultSets=true"));
+            services.AddTransient<IReadRepository<OrderReadModel>, Repository<OrderReadModel>>();
+            services.AddTransient<IRepository<OrderReadModel>, Repository<OrderReadModel>>();
 
             services.AddMediatR(typeof(CreateOrderCommand));
         }

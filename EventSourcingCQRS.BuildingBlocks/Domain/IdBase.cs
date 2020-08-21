@@ -6,15 +6,16 @@ namespace EventSourcingCQRS.BuildingBlocks.Domain
 {
     public abstract class IdBase : IAggregateId
     {
-        public Guid Id { get; }
+        public Guid Id { get; protected set; }
 
-        protected IdBase() 
-        {
-            this.Id = Guid.NewGuid();
-        }
         protected IdBase(Guid id)
         {
             this.Id = id;
+        }
+
+        public IdBase()
+        {
+
         }
 
         public override bool Equals(object obj)
@@ -25,7 +26,6 @@ namespace EventSourcingCQRS.BuildingBlocks.Domain
         {
             return this.Id.GetHashCode();
         }
-
         public Guid GetId() => this.Id;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EventSourcingCQRS.BuildingBlocks.Domain;
 using EventSourcingCQRS.BuildingBlocks.Infrastructure;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -13,10 +14,12 @@ namespace EventSourcingCQRS.Infrastructure.EventSourcing
         where TAggregateId : IAggregateId
     {
         private readonly IEventStore _eventStore;
+        private readonly IMediator _mediator;
 
-        public EventSourcingRepository(IEventStore eventStore)
+        public EventSourcingRepository(IEventStore eventStore, IMediator mediator)
         {
             this._eventStore = eventStore;
+            this._mediator = mediator;
         }
 
         public async Task<TAggregate> GetByIdAsync(TAggregateId id)
@@ -42,6 +45,7 @@ namespace EventSourcingCQRS.Infrastructure.EventSourcing
             foreach (var @event in aggregatePersistance.GetDomainEvents())
             {
                 await this._eventStore.SaveEvent(@event);
+                await this._mediator.Publish(@event);
             }
 
             aggregatePersistance.ClearDomainEvents();

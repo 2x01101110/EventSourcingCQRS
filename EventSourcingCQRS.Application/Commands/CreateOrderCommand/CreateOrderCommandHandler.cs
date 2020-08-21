@@ -20,13 +20,12 @@ namespace EventSourcingCQRS.Application.Commands.CreateOrderCommand
 
         public async Task<Unit> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var orderId = OrderId.NewOrderId(Guid.Parse("1510ffb9-23b5-4880-b512-7ab63f96c554"));
+            //var orderId = OrderId.NewOrderId(Guid.NewGuid());
+            var orderId = OrderId.NewOrderId(Guid.Parse("c048f4bc-cf98-4e03-8345-8e76169cd92e"));
 
-            //var order = Order.CreateOrder(orderId);
+            var order = Order.CreateOrder(orderId);
 
-           // await this._repository.SaveAsync(order);
-
-            await this._repository.GetByIdAsync(orderId);
+            await this._repository.SaveAsync(order);
 
             return Unit.Value;
         }
